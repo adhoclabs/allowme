@@ -39,7 +39,6 @@ import java.util.Map;
 public class AllowMe {
 
     private static final String TAG = AllowMe.class.getSimpleName();
-    private static final String ALLOWME_SHOULD_SHOW_PRIMING_KEY = TAG + ".key.should_show_priming";
     private static AllowMe instance;
 
     private Activity mActivity;
@@ -331,7 +330,7 @@ public class AllowMe {
             throwIfNoCallback();
 
             // permission priming ?
-            if (this.primingMessage != null && shouldShowPrimingMessage()) {
+            if (this.primingMessage != null) {
                 // show the priming message
                 AlertDialog.Builder builder = new AlertDialog.Builder(safeActivity(), rationaleThemeId)
                         .setTitle("")
@@ -363,7 +362,7 @@ public class AllowMe {
 
             // do the magic
             // permission priming ?
-            if (this.primingMessage != null && shouldShowPrimingMessage()) {
+            if (this.primingMessage != null) {
                 // show the priming message
                 AlertDialog.Builder builder = new AlertDialog.Builder(safeActivity(), rationaleThemeId)
                         .setTitle("")
@@ -467,23 +466,6 @@ public class AllowMe {
             } else {
                 AllowMe.requestPermissionWithRationale(callback, requestCode, rationale, rationaleThemeId, this.permission);
             }
-        }
-
-        /**
-         * Returns whether the permission priming message should be shown.
-         * The method will return <code>true</code> the first call around, so the permission priming
-         * message is shown. After that first call, method will return <code>false</code>
-         *
-         * @return <code>true</code> first call around, <code>false</code> other method calls
-         */
-        public boolean shouldShowPrimingMessage() {
-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(safeActivity());
-            boolean value = sharedPreferences.getBoolean(ALLOWME_SHOULD_SHOW_PRIMING_KEY, true);
-
-            // we've been called, set it to false again
-            sharedPreferences.edit().putBoolean(ALLOWME_SHOULD_SHOW_PRIMING_KEY, false).apply();
-
-            return value;
         }
 
         private void throwIfNoPermissions() {
